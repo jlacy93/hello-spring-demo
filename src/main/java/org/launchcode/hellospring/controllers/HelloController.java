@@ -4,61 +4,47 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@ResponseBody
-@RequestMapping("hello")
 public class HelloController {
-    //Handles requests at /hello
-//    @GetMapping("hello")
-//    @ResponseBody
-//    public String hello(){
-//        return "Hello, Spring";
-//    }
 
-    //now lives at /hello/goodbye
-    @GetMapping("goodbye")
-    public String goodbye(){
-        return "Goodbye, Spring";
+    @RequestMapping(value = "hello", method = {RequestMethod.POST})
+    @ResponseBody
+    public String helloPost(@RequestParam String name, @RequestParam String language){
+        if(name == null){
+            name = "World";
+        }
+        return createMessage(name, language);
     }
 
-    //Handles request of the form /hello?name=launchcode
-    //Change GetMapping to RequestMapping for both get and post
-//    @GetMapping("hello")
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
-    public String helloWithQueryParam(@RequestParam String name){
-        return "Hello, " + name + "!";
-    }
-
-    //handles requests of the form /hello/launchcode
-    @GetMapping("{name}")
-    public String helloWithPathParam(@PathVariable String name){
-        return "Hello, " + name + '!';
-    }
-
-//Get Request
-//    @GetMapping("form")
-//    @ResponseBody
-//    public String helloForm(){
-//        return "<html>" +
-//                "<body>" +
-//                "<form action ='hello'>" + //submit a request to /hello
-//                "<input type = 'text' name='name'>" +
-//                "<input type = 'submit' value = 'Greet me!'>" +
-//                "</form>" +
-//                "</body>" +
-//                "</html>";
-//    }
-
-    //Post Request
-    // /hello/forms
-    @GetMapping("form")
+    @GetMapping()
+    @ResponseBody
     public String helloForm(){
         return "<html>" +
                 "<body>" +
-                "<form action ='hello' method = 'post'>" + //submit a request to /hello
-                "<input type = 'text' name='name'>" +
+                "<form action ='hello' method = 'post'>"  +
+                "<input type = 'text' name='name' value = 'name'>" +
+                "<input type = 'text' name='language' value = 'language'>" +
                 "<input type = 'submit' value = 'Greet me!'>" +
                 "</form>" +
                 "</body>" +
                 "</html>";
     }
+
+    public static String createMessage(String n, String l){
+        String greeting = "";
+
+        if(l.equals("english")){
+            greeting = "hello";
+        } else if(l.equals("french")){
+            greeting = "Bonjour";
+        } else if(l.equals("italian")){
+            greeting = "PERRY'S POOL PARTY 7.20.23 APT 102";
+        } else if(l.equals("spanish")){
+            greeting = "Hola";
+        } else if(l.equals("german")){
+            greeting = "Hallo";
+        }
+
+        return greeting + " " + n;
+    }
+
 }
